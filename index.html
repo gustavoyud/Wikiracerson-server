@@ -1,0 +1,40 @@
+<html>
+  <head>
+    <script src="https://cdn.socket.io/4.3.2/socket.io.min.js" integrity="sha384-KAZ4DtjNhLChOB/hxXuKqhMLYvx3b5MlT55xPEiNmREKRzeEm+RVPlTnAn0ajQNs" crossorigin="anonymous"></script>
+    <script>
+      const socket = io('http://localhost:3000/lobby', {
+        auth: {
+          id: Math.floor(Math.random() * 1000),
+          meuNome: 'Gustavo ' + Math.floor(Math.random() * 1000),
+        }
+      });
+      socket.emit('getPlayers', (data) => {
+        addToCount(data);
+      });
+      socket.on('newPlayer', (data) => {
+        console.log('🕵‍♂', data);
+        addToCount(data);
+      });
+      socket.on('isDonoDaSala', (data) => {
+        console.log('🕵‍♂', data);
+        // addToCount(data);
+      });
+
+      function addToCount(data) {
+        const h2 = document.querySelector('h2');
+        h2.innerHTML = data.length;
+      }
+      function sendUser() {
+        const input = document.querySelector('input');
+        socket.emit('player', input.value);
+      }
+    </script>
+  </head>
+
+  <body>
+    <h1>Número de usuários:</h1>
+    <h2></h2>
+    <input />
+    <button onclick="sendUser()">Logar</button>
+  </body>
+</html>
