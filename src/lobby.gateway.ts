@@ -14,9 +14,9 @@ interface Player {
 }
 
 @WebSocketGateway({
-  cors: {
-    origin: '*',
-  },
+  // cors: {
+  //   origin: '*',
+  // },
   namespace: 'lobby',
 })
 export class LobbyGateway implements OnGatewayConnection, OnGatewayDisconnect {
