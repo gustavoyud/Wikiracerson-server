@@ -48,7 +48,7 @@ export class LobbyGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
   private setDonoDaSala() {
     const player = this.players.find(({ isDonoDaSala }) => isDonoDaSala);
-    this.server.to(player.id).emit('isDonoDaSala', true);
+    this.server.to(player?.id).emit('isDonoDaSala', true);
   }
 
   @SubscribeMessage('getPlayers')
