@@ -1,4 +1,5 @@
 import {
+  MessageBody,
   OnGatewayConnection,
   OnGatewayDisconnect,
   SubscribeMessage,
@@ -54,6 +55,11 @@ export class LobbyGateway implements OnGatewayConnection, OnGatewayDisconnect {
   @SubscribeMessage('getPlayers')
   public getPlayer() {
     this.getCurrentLobby();
+  }
+
+  @SubscribeMessage('gameStarted')
+  public gameStarted(@MessageBody() data: any) {
+    this.server.emit('gameHasStarted', data);
   }
 
   private getCurrentLobby() {
