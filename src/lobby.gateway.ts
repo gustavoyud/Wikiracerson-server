@@ -1,4 +1,5 @@
 import {
+  ConnectedSocket,
   MessageBody,
   OnGatewayConnection,
   OnGatewayDisconnect,
@@ -6,7 +7,7 @@ import {
   WebSocketGateway,
   WebSocketServer,
 } from '@nestjs/websockets';
-import { Server } from 'socket.io';
+import { Server, Socket } from 'socket.io';
 
 interface Player {
   meuNome: string;
@@ -31,11 +32,12 @@ export class LobbyGateway implements OnGatewayConnection, OnGatewayDisconnect {
       ...client.handshake.auth,
       id: client.id,
       isDonoDaSala: this.players?.length === 0,
+      history: [],
     };
 
     // TODO: Deixar igual a nossa inspiração, pegando o lider da sala pela ordem alfabética
     this.players = [...this.players, player];
-    this.emitNewPlayers();
+    this.emitNewPlayer();
     this.setDonoDaSala();
   }
 
@@ -43,7 +45,7 @@ export class LobbyGateway implements OnGatewayConnection, OnGatewayDisconnect {
     this.players = this.players
       .filter(({ id }) => id !== client?.id)
       .map((player, index) => ({ ...player, isDonoDaSala: index === 0 }));
-    this.getCurrentLobby();
+    this.emitNewPlayer();
     this.setDonoDaSala();
   }
 
@@ -54,19 +56,27 @@ export class LobbyGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
   @SubscribeMessage('getPlayers')
   public getPlayer() {
-    this.getCurrentLobby();
+    this.emitNewPlayer();
   }
 
   @SubscribeMessage('gameStarted')
   public gameStarted(@MessageBody() data: any) {
     this.server.emit('gameHasStarted', data);
+    this.players = this.players.map((player) => ({ ...player, history: [] }));
+    this.emitNewPlayer();
   }
 
-  private getCurrentLobby() {
+  private emitNewPlayer() {
     this.server.emit('currentLobby', this.players);
   }
 
-  private emitNewPlayers() {
-    this.server.emit('newPlayer', this.players);
+  @SubscribeMessage('updateHistory')
+  public updateHistory(
+    @ConnectedSocket() client: Socket,
+    @MessageBody() history: any,
+  ) {
+    const player: any = this.players.find(({ id }) => id === client?.id);
+    player.history.push(history);
+    this.emitNewPlayer();
   }
 }

@@ -59,11 +59,11 @@ export class WikiController {
     const pageId = page?.pageid;
     const stringData = page?.revisions?.[0].slots?.main?.content ?? '';
     const links = stringData?.match(
-      /\[{2}([a-zA-Z0-9 \-\(\)]*\|[a-zA-Z0-9 \-]*|[a-zA-Z0-9 \-\(\)]*)\]{2}/g,
+      /\[{2}([a-zA-Z0-9 \-\(\)#.,]*\|[a-zA-Z0-9 \-]*|[a-zA-Z0-9 \-\(\)#.,]*)\]{2}/g,
     );
 
     if (!links?.length) {
-      return { status: 6007, error: 'Parece que deu ruim!' };
+      return { status: 6007, error: stringData };
     }
 
     return {
