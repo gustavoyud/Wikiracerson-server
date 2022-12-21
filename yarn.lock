@@ -704,7 +704,7 @@
     tslib "2.4.0"
     uuid "8.3.2"
 
-"@nestjs/core@^8.0.0":
+"@nestjs/core@8.4.7":
   version "8.4.7"
   resolved "https://registry.npmjs.org/@nestjs/core/-/core-8.4.7.tgz#fbec7fa744ac8749a4b966f759a6656c1cf43883"
   integrity sha512-XB9uexHqzr2xkPo6QSiQWJJttyYYLmvQ5My64cFvWFi7Wk2NIus0/xUNInwX3kmFWB6pF1ab5Y2ZBvWdPwGBhw==
@@ -717,7 +717,7 @@
     tslib "2.4.0"
     uuid "8.3.2"
 
-"@nestjs/platform-express@^8.0.0":
+"@nestjs/platform-express@8.4.7":
   version "8.4.7"
   resolved "https://registry.npmjs.org/@nestjs/platform-express/-/platform-express-8.4.7.tgz#402a3d3c47327a164bb3867615f423c29d1a6cd9"
   integrity sha512-lPE5Ltg2NbQGRQIwXWY+4cNrXhJdycbxFDQ8mNxSIuv+LbrJBIdEB/NONk+LLn9N/8d2+I2LsIETGQrPvsejBg==
@@ -728,7 +728,7 @@
     multer "1.4.4-lts.1"
     tslib "2.4.0"
 
-"@nestjs/platform-socket.io@^9.1.4":
+"@nestjs/platform-socket.io@9.1.4":
   version "9.1.4"
   resolved "https://registry.npmjs.org/@nestjs/platform-socket.io/-/platform-socket.io-9.1.4.tgz#c9f60f80019b3f9328b24f790436a3bdf43d9b0f"
   integrity sha512-6hIux90/uK4O5JFfs55FCqV+x6Z1YElAN/8PqChKO9yt/WsTY6GA8bBbLvzfkQsi3zWjvcqqEb0j0qeeXxlwUg==
@@ -754,7 +754,7 @@
   dependencies:
     tslib "2.4.0"
 
-"@nestjs/websockets@^9.1.4":
+"@nestjs/websockets@9.1.4":
   version "9.1.4"
   resolved "https://registry.npmjs.org/@nestjs/websockets/-/websockets-9.1.4.tgz#9b612626433bdffa6ce232e641c74667afb0b3f7"
   integrity sha512-tRiBVhBo41jsLsrQ1WMhO1EvDUSO2ydmCdB1x8pMC69bSCvEVj6VvL1/OJ2lP4j65g/4rFMtp5qBSlwPUuHqkw==
@@ -1032,7 +1032,7 @@
     "@types/mime" "*"
     "@types/node" "*"
 
-"@types/socket.io@^3.0.2":
+"@types/socket.io@3.0.2":
   version "3.0.2"
   resolved "https://registry.npmjs.org/@types/socket.io/-/socket.io-3.0.2.tgz#606c9639e3f93bb8454cba8f5f0a283d47917759"
   integrity sha512-pu0sN9m5VjCxBZVK8hW37ZcMe8rjn4HHggBN5CbaRTvFwv5jOmuIRZEuddsBPa9Th0ts0SIo3Niukq+95cMBbQ==
