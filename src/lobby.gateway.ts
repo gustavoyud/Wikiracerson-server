@@ -78,5 +78,18 @@ export class LobbyGateway implements OnGatewayConnection, OnGatewayDisconnect {
     const player: any = this.players.find(({ id }) => id === client?.id);
     player.history.push(history);
     this.emitNewPlayer();
+    // if (history === articles?.title) {
+    //   this.gameFinished(player);
+    // }
+  }
+
+  @SubscribeMessage('hasWinner')
+  public hasAWinner(@ConnectedSocket() client: Socket) {
+    const player: any = this.players.find(({ id }) => id === client?.id);
+    this.gameFinished(player);
+  }
+
+  private gameFinished(winner: any) {
+    this.server.emit('gameHasFinished', winner);
   }
 }

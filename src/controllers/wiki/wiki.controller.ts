@@ -33,12 +33,9 @@ export class WikiController {
   ): Observable<any> {
     const params = {
       format: 'json',
-      action: 'query',
-      prop: 'revisions',
-      formatversion: '2',
-      rvprop: 'content',
-      rvslots: '*',
-      titles,
+      action: 'parse',
+      prop: 'links',
+      page: titles,
     };
 
     return this.http
@@ -55,22 +52,12 @@ export class WikiController {
   }
 
   private parseWikiLinks(data: any) {
-    const page = data?.query?.pages?.[0];
-    const pageId = page?.pageid;
-    const stringData = page?.revisions?.[0].slots?.main?.content ?? '';
-    const links = stringData?.match(
-      /\[{2}([a-zA-Z0-9 \-\(\)#.,]*\|[a-zA-Z0-9 \-]*|[a-zA-Z0-9 \-\(\)#.,]*)\]{2}/g,
-    );
-
-    if (!links?.length) {
-      return { status: 6007, error: stringData };
-    }
+    const pageId = data?.parse?.pageid;
+    const links = data?.parse?.links;
 
     return {
       pageId,
-      links: links
-        ?.map((link) => link.replace(/[\[\]]/g, '').split('|'))
-        ?.map(([link, label]) => ({ label: label ?? link, link })),
+      links: links?.map((data) => ({ label: data['*'], link: data['*'] })),
     };
   }
 }
