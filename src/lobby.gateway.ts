@@ -13,6 +13,8 @@ interface Player {
   meuNome: string;
   id: string;
   isDonoDaSala: boolean;
+  history: string[];
+  isControlF: boolean;
 }
 
 @WebSocketGateway({
@@ -33,6 +35,7 @@ export class LobbyGateway implements OnGatewayConnection, OnGatewayDisconnect {
       id: client.id,
       isDonoDaSala: this.players?.length === 0,
       history: [],
+      isControlF: false,
     };
 
     // TODO: Deixar igual a nossa inspiração, pegando o lider da sala pela ordem alfabética
@@ -78,18 +81,31 @@ export class LobbyGateway implements OnGatewayConnection, OnGatewayDisconnect {
     const player: any = this.players.find(({ id }) => id === client?.id);
     player.history.push(history);
     this.emitNewPlayer();
-    // if (history === articles?.title) {
-    //   this.gameFinished(player);
-    // }
+  }
+
+  @SubscribeMessage('isHackerzaum')
+  public isHacker(@ConnectedSocket() client: Socket) {
+    const player: Player = this.players.find(({ id }) => id === client?.id);
+    player.isControlF = true;
+    this.hasHackerzaum(player);
+    this.emitNewPlayer();
+    setTimeout(() => {
+      player.isControlF = false;
+      this.emitNewPlayer();
+    }, 10000);
   }
 
   @SubscribeMessage('hasWinner')
-  public hasAWinner(@ConnectedSocket() client: Socket) {
+  public hasHack(@ConnectedSocket() client: Socket) {
     const player: any = this.players.find(({ id }) => id === client?.id);
     this.gameFinished(player);
   }
 
   private gameFinished(winner: any) {
     this.server.emit('gameHasFinished', winner);
+  }
+
+  private hasHackerzaum(hackerzaum: any) {
+    this.server.emit('hasHackerzaum', hackerzaum);
   }
 }
