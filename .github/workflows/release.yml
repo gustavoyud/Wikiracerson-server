@@ -1,0 +1,31 @@
+
+name: Release
+
+on:
+  push:
+    branches:
+    - master
+
+jobs: 
+   new-release:
+      runs-on: ubuntu-latest 
+      steps: 
+         - uses: actions/checkout@v3 # Checkout our working repository 
+         - name: Changelog
+           id: Changelog
+           uses: TriPSs/conventional-changelog-action@v3 
+           env:
+              github-token: ${{ secrets.GITHUB_TOKEN }}
+              output-file: "false" 
+
+         - name: Create Release
+           id: create_release
+           uses: actions/create-release@latest
+           if: ${{ steps.Changelog.outputs.skipped == 'false' }}
+           env:
+             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+           with:
+            tag_name: ${{ steps.Changelog.outputs.tag }}
+            release_name: Release ${{ steps.Changelog.outputs.tag }}
+            body: |
+              ${{ steps.Changelog.outputs.clean_changelog }}
