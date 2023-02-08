@@ -51,13 +51,22 @@ export class WikiController {
     return data?.query?.random.map(({ id, title }) => ({ id, title }));
   }
 
+  private parseLabel(label: string) {
+    return label?.replace(/^([a-zA-Z ]*):/g, '<b>$1</b>: ');
+  }
+
   private parseWikiLinks(data: any) {
     const pageId = data?.parse?.pageid;
     const links = data?.parse?.links;
 
     return {
       pageId,
-      links: links?.map((data) => ({ label: data['*'], link: data['*'] })),
+      links: links
+        ?.map((data) => ({
+          label: this.parseLabel(data['*']),
+          link: data['*'],
+        }))
+        .filter(({ link }) => !/^(Wikipedia|Template|Help):/g.test(link)),
     };
   }
 }
