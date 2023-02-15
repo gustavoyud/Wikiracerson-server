@@ -31,11 +31,11 @@ export class LobbyGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
   public handleConnection(client: any) {
     const player = {
-      ...client.handshake.auth,
       id: client.id,
       isDonoDaSala: this.players?.length === 0,
       history: [],
       isControlF: false,
+      ...client.handshake.auth,
     };
 
     // TODO: Deixar igual a nossa inspiração, pegando o lider da sala pela ordem alfabética
@@ -53,12 +53,21 @@ export class LobbyGateway implements OnGatewayConnection, OnGatewayDisconnect {
   }
 
   private setDonoDaSala() {
-    const player = this.players.find(({ isDonoDaSala }) => isDonoDaSala);
-    this.server.to(player?.id).emit('isDonoDaSala', true);
+    const playerDono = this.players?.find(({ isDonoDaSala }) => isDonoDaSala);
+    this.players?.forEach(({ id }) => {
+      this.server.to(id).emit('isDonoDaSala', id === playerDono?.id);
+    });
   }
 
   @SubscribeMessage('getPlayers')
   public getPlayer() {
+    this.emitNewPlayer();
+  }
+
+  @SubscribeMessage('setPlayers')
+  public setPlayer(@MessageBody() data: any) {
+    const players = this.players.filter(({ id }) => id !== data?.id);
+    this.players = [...players, data];
     this.emitNewPlayer();
   }
 
